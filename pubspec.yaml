@@ -1,0 +1,14 @@
+name: basic_app
+description: A practice dart web app
+version: 0.0.1
+author: Nick Anderssohn <ncadevelopment@gmail.com>
+environment:
+  sdk: any
+dependencies:
+  browser: any
+  js: any
+  sass: any
+transformers:
+- $dart2js:
+    minify: true
+- sass
