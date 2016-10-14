@@ -114,6 +114,25 @@ class ImageEditor {
     int height = d2.y - d1.y;
     drawLayerCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
+    //draw dots at corners
+    drawLayerCtx.beginPath();
+    drawLayerCtx.arc(d1.x * scalar, d1.y * scalar, 4, 0, 2 * PI);
+    drawLayerCtx.fill();
+    drawLayerCtx.closePath();
+    drawLayerCtx.beginPath();
+    drawLayerCtx.arc(d1.x * scalar, (d1.y + height) * scalar, 4, 0, 2 * PI);
+    drawLayerCtx.fill();
+    drawLayerCtx.closePath();
+    drawLayerCtx.beginPath();
+    drawLayerCtx.arc((d1.x + width) * scalar, (d1.y + height) * scalar, 4, 0, 2 * PI);
+    drawLayerCtx.fill();
+    drawLayerCtx.closePath();
+    drawLayerCtx.beginPath();
+    drawLayerCtx.arc((d1.x + width) * scalar, d1.y * scalar, 4, 0, 2 * PI);
+    drawLayerCtx.fill();
+    drawLayerCtx.closePath();
+
+    //draw box
     drawLayerCtx.beginPath();
     drawLayerCtx.moveTo(d1.x * scalar, d1.y * scalar);
     drawLayerCtx.lineTo(d1.x * scalar, (d1.y + height) * scalar);
@@ -122,7 +141,6 @@ class ImageEditor {
     drawLayerCtx.lineTo(d1.x * scalar, d1.y * scalar);
     drawLayerCtx.stroke();
     drawLayerCtx.closePath();
-
 
     _refreshDisplay();
   }
