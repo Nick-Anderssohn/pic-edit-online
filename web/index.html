@@ -8,7 +8,8 @@
   </head>
   <body>
       <h1 id="title">Pic Edit Online</h1>
-      <button id="btn-upload">Upload</button>
+      <input id="file-input" type="file" style="display:none;" />
+      <input type="button" value="Select File" onclick="document.getElementById('file-input').click();"/>
       <button id="btn-download">Download</button>
       <p>
       <canvas id="pic-canvas"></canvas>
