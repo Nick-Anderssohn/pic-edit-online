@@ -20,8 +20,8 @@ class ImageEditor {
     reader.onLoad.listen((var e) {
       image.onLoad.listen((var e) {
         canvas.width = image.width;
-        canvas.height = image.height;
-        ctx.drawImage(image, 0, 0);
+        canvas.height = (image.height * (canvas.width / image.width)).round(); //scale correctly
+        ctx.drawImageScaled(image, 0, 0, canvas.width, canvas.height);
       });
       image.src = e.target.result;
     });
