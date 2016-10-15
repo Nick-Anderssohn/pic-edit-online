@@ -19,13 +19,16 @@ class ImageEditor {
   Point p4 = null; //crop box point 4
   double scalar = 1.0;
   int get canvasWidth => canvas.width;
+
   void set canvasWidth(int value) {
     canvas.width = value;
     drawLayer.width = value;
     imageLayer.width = value;
     scalar = image.width / canvas.getBoundingClientRect().width;
   }
+  
   int get canvasHeight => canvas.height;
+
   void set canvasHeight(int value) {
     canvas.height = value;
     drawLayer.height = value;
