@@ -8,6 +8,8 @@ class ImageEditor {
   CanvasRenderingContext2D get drawLayerCtx => drawLayer.context2D;
   CanvasElement imageLayer = new CanvasElement();
   CanvasRenderingContext2D get imageLayerCtx => imageLayer.context2D;
+  CanvasElement scratchCanvas = new CanvasElement();
+  CanvasRenderingContext2D get scratchCanvasCtx => scratchCanvas.context2D;
   ImageElement image;
   File imgFile;
   double scalar = 1.0;
@@ -33,6 +35,16 @@ class ImageEditor {
     imgFile = imageFile;
     _loadFile();
     cropBox = new CropBox(canvas, drawLayer, imageLayer, scalar);
+
+    // window.onKeyDown.listen((KeyboardEvent e) {
+    //   if (e.keyCode == KeyCode.ENTER && cropBox.cropping) {
+    //     try {
+    //       _crop();
+    //     } catch (e) {
+    //       print(e);
+    //     }
+    //   }
+    // });
   }
 
   _refreshDisplay() {
@@ -59,5 +71,19 @@ class ImageEditor {
       image.src = e.target.result;
     });
     reader.readAsDataUrl(imgFile);
+  }
+
+  //crops the photo to whatever fits inside the crop box
+  _crop() {
+    //draw image onto scratch
+    // scratchCanvas.width = cropBox.p2.x - cropBox.p1.x;
+    // scratchCanvas.height = cropBox.p4.y - cropBox.p1.y;
+    // ctx.translate(cropBox.p1.x, cropBox.p1.y);
+    // scratchCanvasCtx.drawImage(canvas, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //draw scale back onto canvas
+    // ctx.drawImageScaled(scratchCanvas, 0, 0, scratchCanvas.width, scratchCanvas.height);
+
+    // cropBox.cropping = false;
   }
 }

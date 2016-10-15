@@ -9,6 +9,8 @@ class CropBox {
   CanvasRenderingContext2D get drawLayerCtx => drawLayer.context2D;
   CanvasElement imageLayer;
   CanvasRenderingContext2D get imageLayerCtx => imageLayer.context2D;
+  CanvasElement scratchCanvas = new CanvasElement();
+  CanvasRenderingContext2D get scratchCanvasCtx => scratchCanvas.context2D;
   bool draggingCropBox = false;
   bool _cropping = false;
   bool get cropping => _cropping;
@@ -20,6 +22,9 @@ class CropBox {
       p3 = new RPoint((200 * scalar).round(), (200 * scalar).round());
       p4 = new RPoint((100 * scalar).round(), (200 * scalar).round());
       _drawBox();
+    } else if (_cropping && !value) {
+      //drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
+      //_refreshDisplay();
     }
     _cropping = value;
   }
@@ -29,6 +34,8 @@ class CropBox {
   RPoint p3 = null; //crop box point 3
   RPoint p4 = null; //crop box point 4
   double scalar = 1.0;
+  int _cornerRadius = 4;
+  int get cornerRadius => (_cornerRadius * scalar).round();
 
   CropBox(CanvasElement canvas, CanvasElement drawLayer, CanvasElement imageLayer, double scalar) {
     this.canvas = canvas;
@@ -84,16 +91,27 @@ class CropBox {
         draggingCropBox = false;
       }
     });
+
+    window.onKeyDown.listen((KeyboardEvent e) {
+      if (e.keyCode == KeyCode.ENTER) {
+        try {
+          _crop();
+        } catch (e) {
+          print(e);
+        }
+      }
+
+    });
   }
 
   RPoint _getSelectedCropCorner(int realX, int realY) {
-    if (realX > (p1.x + 2 * scalar) - 4 * scalar && realX < (p1.x + 2 * scalar) + 4 * scalar && realY > (p1.y + 2 * scalar) - 4 * scalar && realY < (p1.y + 2 * scalar) + 4 * scalar)
+    if (realX > (p1.x + cornerRadius / 2) - cornerRadius && realX < (p1.x + cornerRadius / 2) + cornerRadius && realY > (p1.y + cornerRadius / 2) - cornerRadius && realY < (p1.y + cornerRadius / 2) + cornerRadius)
       return p1;
-    if (realX > (p2.x + 2 * scalar) - 4 * scalar && realX < (p2.x + 2 * scalar) + 4 * scalar && realY > (p2.y + 2 * scalar) - 4 * scalar && realY < (p2.y + 2 * scalar) + 4 * scalar)
+    if (realX > (p2.x + cornerRadius / 2) - cornerRadius && realX < (p2.x + cornerRadius / 2) + cornerRadius && realY > (p2.y + cornerRadius / 2) - cornerRadius && realY < (p2.y + cornerRadius / 2) + cornerRadius)
       return p2;
-    if (realX > (p3.x + 2 * scalar) - 4 * scalar && realX < (p3.x + 2 * scalar) + 4 * scalar && realY > (p3.y + 2 * scalar) - 4 * scalar && realY < (p3.y + 2 * scalar) + 4 * scalar)
+    if (realX > (p3.x + cornerRadius / 2) - cornerRadius && realX < (p3.x + cornerRadius / 2) + cornerRadius && realY > (p3.y + cornerRadius / 2) - cornerRadius && realY < (p3.y + cornerRadius / 2) + cornerRadius)
       return p3;
-    if (realX > (p4.x + 2 * scalar) - 4 * scalar && realX < (p4.x + 2 * scalar) + 4 * scalar && realY > (p4.y + 2 * scalar) - 4 * scalar && realY < (p4.y + 2 * scalar) + 4 * scalar)
+    if (realX > (p4.x + cornerRadius / 2) - cornerRadius && realX < (p4.x + cornerRadius / 2) + cornerRadius && realY > (p4.y + cornerRadius / 2) - cornerRadius && realY < (p4.y + cornerRadius / 2) + cornerRadius)
       return p4;
 
     return null;
@@ -138,19 +156,19 @@ class CropBox {
 
       //draw dots at corners
       drawLayerCtx.beginPath();
-      drawLayerCtx.arc(p1.x, p1.y, 4 * scalar, 0, 2 * PI);
+      drawLayerCtx.arc(p1.x, p1.y, cornerRadius, 0, 2 * PI);
       drawLayerCtx.fill();
       drawLayerCtx.closePath();
       drawLayerCtx.beginPath();
-      drawLayerCtx.arc(p2.x, p2.y, 4 * scalar, 0, 2 * PI);
+      drawLayerCtx.arc(p2.x, p2.y, cornerRadius, 0, 2 * PI);
       drawLayerCtx.fill();
       drawLayerCtx.closePath();
       drawLayerCtx.beginPath();
-      drawLayerCtx.arc(p3.x, p3.y, 4 * scalar, 0, 2 * PI);
+      drawLayerCtx.arc(p3.x, p3.y, cornerRadius, 0, 2 * PI);
       drawLayerCtx.fill();
       drawLayerCtx.closePath();
       drawLayerCtx.beginPath();
-      drawLayerCtx.arc(p4.x, p4.y, 4 * scalar, 0, 2 * PI);
+      drawLayerCtx.arc(p4.x, p4.y, cornerRadius, 0, 2 * PI);
       drawLayerCtx.fill();
       drawLayerCtx.closePath();
 
@@ -165,5 +183,25 @@ class CropBox {
       drawLayerCtx.closePath();
 
       _refreshDisplay();
+    }
+
+    //crops the photo to whatever fits inside the crop box
+    _crop() {
+      //draw image onto scratch
+      scratchCanvas.width = p2.x - p1.x;
+      scratchCanvas.height = p4.y - p1.y;
+      ctx.save();
+      ctx.translate(-p1.x, -p1.y);
+      ctx.drawImage(canvas, 0, 0);
+      ctx.restore();
+      scratchCanvasCtx.drawImage(canvas, 0, 0);
+      //ctx.restore();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      //draw scale back onto canvas
+      ctx.drawImageScaled(scratchCanvas, 0, 0, scratchCanvas.width,
+      scratchCanvas.height);
+      //ctx.drawImage(scratchCanvas, 0, 0);
+
+    cropping = false;
     }
 }
