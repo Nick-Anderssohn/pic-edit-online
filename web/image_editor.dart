@@ -11,6 +11,7 @@ class ImageEditor {
   CanvasRenderingContext2D get imageLayerCtx => imageLayer.context2D;
   ImageElement image;
   File imgFile;
+  bool draggingCropBox = false;
   bool _cropping = false;
   bool get cropping => _cropping;
   void set cropping(bool value) {
@@ -82,26 +83,35 @@ class ImageEditor {
   }
 
   _handleCropping() {
+    int ogX = 0;
+    int ogY = 0;
     canvas.onMouseDown.listen((MouseEvent e) {
       if (cropping) {
         var cRect = canvas.getBoundingClientRect();
         int realX = (e.client.x - cRect.left) * scalar;
         int realY = (e.client.y - cRect.top) * scalar;
+        ogX = realX;
+        ogY = realY;
         //if box coordinates have not been set
         pSelected = _getSelectedCropCorner(realX, realY);
-        print(pSelected);
+        if (pSelected == null)
+          draggingCropBox = _isInCropBox(realX, realY);
       }
     });
 
     canvas.onMouseMove.listen((var e) {
       if (cropping) {
+        var cRect = canvas.getBoundingClientRect();
+        int realX = (e.client.x - cRect.left) * scalar;
+        int realY = (e.client.y - cRect.top) * scalar;
         if (pSelected != null) {
-          var cRect = canvas.getBoundingClientRect();
-          int realX = (e.client.x - cRect.left) * scalar;
-          int realY = (e.client.y - cRect.top) * scalar;
           pSelected.x = realX;
           pSelected.y = realY;
           _drawBox();
+        } else if (draggingCropBox) {
+          _moveBox(ogX - realX, ogY - realY);
+          ogX = realX;
+          ogY = realY;
         }
       }
     });
@@ -109,6 +119,7 @@ class ImageEditor {
     canvas.onMouseUp.listen((var e) {
       if (cropping) {
         pSelected = null;
+        draggingCropBox = false;
       }
     });
   }
@@ -124,6 +135,26 @@ class ImageEditor {
       return p4;
 
     return null;
+  }
+
+  bool _isInCropBox(int realX, int realY) {
+    if (realX > p1.x && realX < p2.x && realY > p1.y && realY < p4.y)
+      return true;
+    return false;
+  }
+
+  _moveBox(int distX, int distY) {
+    p1.x -= distX;
+    p2.x -= distX;
+    p3.x -= distX;
+    p4.x -= distX;
+
+    p1.y -= distY;
+    p2.y -= distY;
+    p3.y -= distY;
+    p4.y -= distY;
+
+    _drawBox();
   }
 
   _drawBox() {
