@@ -27,5 +27,5 @@ _updateStyles() {
 
 _setHandlers() {
   fileInput.onChange.listen((var e) => editor = new ImageEditor(picCanvas, fileInput.files[0]));
-  btnCrop.onClick.listen((var e) => editor.cropping = !editor.cropping);
+  btnCrop.onClick.listen((var e) => editor.cropBox.cropping = !editor.cropBox.cropping);
 }
