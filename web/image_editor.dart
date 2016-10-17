@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:io';
 import 'crop_box.dart';
 
 class ImageEditor {
