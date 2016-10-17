@@ -35,6 +35,7 @@ class ImageEditor {
     imgFile = imageFile;
     _loadFile();
     cropBox = new CropBox(canvas, drawLayer, imageLayer, scalar);
+    cropBox.onCrop.listen((var e) => scalar = image.width / canvas.getBoundingClientRect().width);
   }
 
   _refreshDisplay() {

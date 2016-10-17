@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:math';
+import 'dart:async';
 import 'r_point.dart';
 
 class CropBox {
@@ -36,6 +37,8 @@ class CropBox {
   double scalar = 1.0;
   int _cornerRadius = 4;
   int get cornerRadius => (_cornerRadius * scalar).round();
+  StreamController _cropStreamer = new StreamController.broadcast();
+  Stream get onCrop => _cropStreamer.stream;
 
   CropBox(CanvasElement canvas, CanvasElement drawLayer, CanvasElement imageLayer, double scalar) {
     this.canvas = canvas;
@@ -209,7 +212,8 @@ class CropBox {
       drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
       _refreshDisplay();
 
-    cropping = false;
+      cropping = false;
+      _cropStreamer.add("cropped");
     }
 
     _canvasToImageSize() {
