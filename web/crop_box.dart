@@ -195,13 +195,25 @@ class CropBox {
       ctx.drawImage(canvas, 0, 0);
       ctx.restore();
       scratchCanvasCtx.drawImage(canvas, 0, 0);
-      //ctx.restore();
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       //draw scale back onto canvas
-      ctx.drawImageScaled(scratchCanvas, 0, 0, scratchCanvas.width,
-      scratchCanvas.height);
+      imageLayer.width = scratchCanvas.width;
+      imageLayer.height = scratchCanvas.height;
+      imageLayerCtx.clearRect(0, 0, imageLayer.width, imageLayer.height);
+      _canvasToImageSize();
+      imageLayerCtx.drawImage(scratchCanvas, 0, 0);
       //ctx.drawImage(scratchCanvas, 0, 0);
 
+      drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
+      _refreshDisplay();
+
     cropping = false;
+    }
+
+    _canvasToImageSize() {
+      canvas.style.width = imageLayer.width.toString() + "px";
+      canvas.style.height = imageLayer.height.toString() + "px";
+      canvas.width = imageLayer.width;
+      canvas.height = imageLayer.height;
     }
 }
