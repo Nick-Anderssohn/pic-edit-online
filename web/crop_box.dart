@@ -187,6 +187,8 @@ class CropBox {
 
     //crops the photo to whatever fits inside the crop box
     _crop() {
+      drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height); //so crop box doesnt show up
+      _refreshDisplay();
       //draw image onto scratch
       scratchCanvas.width = p2.x - p1.x;
       scratchCanvas.height = p4.y - p1.y;
