@@ -35,7 +35,7 @@ class ImageEditor {
     imgFile = imageFile;
     _loadFile();
     cropBox = new CropBox(canvas, drawLayer, imageLayer, scalar);
-    cropBox.onCrop.listen((var e) => scalar = image.width / canvas.getBoundingClientRect().width);
+    cropBox.onCrop.listen((var e) => scalar = imageLayer.width / canvas.getBoundingClientRect().width);
   }
 
   _refreshDisplay() {
@@ -62,12 +62,5 @@ class ImageEditor {
       image.src = e.target.result;
     });
     reader.readAsDataUrl(imgFile);
-  }
-
-  _canvasToImageSize() {
-    canvas.style.width = imageLayer.width.toString() + "px";
-    canvas.style.height = imageLayer.height.toString() + "px";
-    canvas.width = imageLayer.width;
-    canvas.height = imageLayer.height;
   }
 }

@@ -217,9 +217,13 @@ class CropBox {
     }
 
     _canvasToImageSize() {
-      canvas.style.width = imageLayer.width.toString() + "px";
-      canvas.style.height = imageLayer.height.toString() + "px";
+      if (imageLayer.width < window.innerWidth)
+        canvas.style.width = imageLayer.width.toString() + 'px';
+      else
+        canvas.style.width = "100%";
+      //canvas.style.height = imageLayer.height.toString() + "px";
       canvas.width = imageLayer.width;
       canvas.height = imageLayer.height;
+      scalar = imageLayer.width / canvas.getBoundingClientRect().width;
     }
 }
