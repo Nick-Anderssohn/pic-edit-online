@@ -160,7 +160,6 @@ class CropBox {
       p4.y = p3.y = p1.y + ogH;
     }
 
-
     _drawBox();
   }
 

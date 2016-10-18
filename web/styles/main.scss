@@ -1,9 +1,59 @@
+$nice-grey: #e7e8e9;
+$white: #ffffff;
+$black: #000000;
+$marble-blue: #566D7E;
+$dark-slate-blue: #2B3856;
+$cool-blue: #567890;
+$chill-green: #1ABC9C;
+$dark-blue-steel: #2C3E50;
+$grey-font-color: #D6DBDF;
+
+.body {
+  margin: 0;
+}
+
 .title {
-  color: #567890;
+  color: $cool-blue;
+  margin: 5px;
 }
 
 .pic-canvas {
-  background-color: #e3e4e5;
-  border: solid;
-  border-width: 1px;
+  float: left;
+  background-color: $nice-grey;
+}
+
+.sidebar {
+  float: left;
+  height: 100%;
+  width: 50px;
+  background-color: $marble-blue;
+}
+
+.page {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: $nice-grey;
+  overflow: hidden;
+}
+
+.top-bar {
+  float: left;
+  width: 100%;
+  background-color: $dark-slate-blue;
+}
+
+.canvas-container {
+  float: left;
+  height: 100%;
+  width: calc(100% - 50px);
+}
+
+.sidebar-option {
+  text-align: center;
+  color: $grey-font-color;
+  background-color: $dark-blue-steel;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer;
 }

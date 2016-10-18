@@ -6,13 +6,20 @@
     <script defer src="main.dart" type="application/dart"></script>
     <script defer src="packages/browser/dart.js"></script>
   </head>
-  <body>
-      <h1 id="title">Pic Edit Online</h1>
-      <input id="file-input" type="file" style="display:none;" />
-      <input type="button" value="Select File" onclick="document.getElementById('file-input').click();"/>
-      <button id="btn-download">Download</button>
-      <button id="btn-crop">Crop</button>
-      <p>
-      <canvas id="pic-canvas"></canvas>
+  <body class="body">
+      <h1 id="title" class="title">Pic Edit Online</h1>
+      <div id="page" class="page">
+        <div id="top-bar" class="top-bar">
+          <input id="file-input" type="file" style="display:none;" />
+          <input type="button" value="Select File" onclick="document.getElementById('file-input').click();"/>
+          <button id="btn-download">Download</button>
+        </div>
+        <div id="sidebar" class="sidebar">
+          <div id="option-crop" class="sidebar-option">Crop</div>
+        </div>
+        <div id="canvas-container" class="canvas-container">
+          <canvas id="pic-canvas" class="pic-canvas"></canvas>
+        </div>
+    </div>
   </body>
 </html>
