@@ -78,6 +78,7 @@ class CropBox {
         var cRect = canvas.getBoundingClientRect();
         int realX = (e.client.x - cRect.left) * scalar;
         int realY = (e.client.y - cRect.top) * scalar;
+
         if (pSelected != null) {
           pSelected.x = realX;
           pSelected.y = realY;
@@ -129,6 +130,8 @@ class CropBox {
   }
 
   _moveBox(int distX, int distY) {
+    int ogW = p2.x - p1.x;
+    int ogH = p4.y - p1.y;
     p1.x -= distX;
     p2.x -= distX;
     p3.x -= distX;
@@ -138,6 +141,25 @@ class CropBox {
     p2.y -= distY;
     p3.y -= distY;
     p4.y -= distY;
+
+    if (p1.x < 0) {
+      p4.x = p1.x = 0;
+      p3.x = p2.x = p1.x + ogW;
+    }
+    else if (p2.x > canvas.width) {
+      p3.x = p2.x = canvas.width;
+      p4.x = p1.x = p3.x - ogW;
+    }
+
+    if (p4.y > canvas.height) {
+      p4.y = p3.y = canvas.height;
+      p1.y = p2.y = p4.y - ogH;
+    }
+    else if (p1.y < 0) {
+      p1.y = p2.y = 0;
+      p4.y = p3.y = p1.y + ogH;
+    }
+
 
     _drawBox();
   }
