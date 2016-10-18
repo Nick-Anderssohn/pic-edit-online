@@ -17,11 +17,13 @@ class CropBox {
   bool get cropping => _cropping;
   void set cropping(bool value) {
     if (!_cropping && value == true) {
+      int tempW = (.25 * canvas.width).truncate();
+      int tempH = (.25 * canvas.height).truncate();
       //add/draw points
-      p1 = new RPoint((100 * scalar).round(), (100 * scalar).round());
-      p2 = new RPoint((200 * scalar).round(), (100 * scalar).round());
-      p3 = new RPoint((200 * scalar).round(), (200 * scalar).round());
-      p4 = new RPoint((100 * scalar).round(), (200 * scalar).round());
+      p1 = new RPoint(tempW, tempH);
+      p2 = new RPoint(2 * tempW, tempH);
+      p3 = new RPoint(2 * tempW, 2 * tempH);
+      p4 = new RPoint(tempW, 2 * tempH);
       _drawBox();
     } else if (_cropping && !value) {
       //drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
