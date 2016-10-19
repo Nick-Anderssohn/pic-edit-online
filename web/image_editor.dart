@@ -51,8 +51,9 @@ class ImageEditor {
     image = new ImageElement();
     reader.onLoad.listen((var e) {
       image.onLoad.listen((var e) {
-        if (image.width < window.innerWidth)
+        if (image.width < window.innerWidth) {
           canvas.style.width = image.width.toString() + 'px';
+        }
         else
           canvas.style.width = "100%";
         canvasWidth = image.width;

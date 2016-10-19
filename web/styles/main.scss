@@ -13,6 +13,7 @@ $grey-font-color: #D6DBDF;
 
 .body {
   margin: 0;
+  background-color: $nice-grey;
 }
 
 .title {
@@ -40,7 +41,6 @@ $grey-font-color: #D6DBDF;
   height: calc(100% - 45px);
   width: 100%;
   background-color: $nice-grey;
-  overflow: hidden;
 }
 
 .top-bar {
