@@ -1,5 +1,6 @@
 $nice-grey: #e7e8e9;
 $grey: #C4C4C4;
+$dark-grey: #666666;
 $white: #ffffff;
 $black: #000000;
 $marble-blue: #566D7E;
@@ -48,6 +49,7 @@ $grey-font-color: #D6DBDF;
   background-color: $dark-slate-blue;
   border-bottom: solid;
   border-bottom-width: 1px;
+  padding-left: 5px;
 }
 
 .canvas-container {
@@ -73,9 +75,9 @@ $grey-font-color: #D6DBDF;
 
 .top-bar-option {
   float: left;
-  margin-right: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
   border: none;
-  width: 80px;
   color: $grey-font-color;
   text-align: center;
   cursor: pointer;
@@ -83,4 +85,17 @@ $grey-font-color: #D6DBDF;
   &:hover {
     background-color: $slate-blue;
   }
+}
+
+.drop-down {
+  position: absolute;
+  z-index: 1;
+}
+
+.drop-down-item {
+  background-color: $dark-grey;
+  width: 150px;
+  line-height: 22px;
+  text-align: left;
+  padding-left: 5px;
 }
