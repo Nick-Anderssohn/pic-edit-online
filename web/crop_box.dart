@@ -73,13 +73,22 @@ class CropBox {
       }
     });
 
-    canvas.onMouseMove.listen((var e) {
+    window.onMouseMove.listen((var e) {
       if (cropping) {
         var cRect = canvas.getBoundingClientRect();
         int realX = (e.client.x - cRect.left) * scalar;
         int realY = (e.client.y - cRect.top) * scalar;
 
         if (pSelected != null) {
+          if (realX < 0)
+            realX = 0;
+          else if (realX > canvas.width)
+            realX = canvas.width;
+
+          if (realY < 0)
+            realY = 0;
+          else if (realY > canvas.height)
+            realY = canvas.height;
           pSelected.x = realX;
           pSelected.y = realY;
           _drawBox();
@@ -91,7 +100,7 @@ class CropBox {
       }
     });
 
-    canvas.onMouseUp.listen((var e) {
+    window.onMouseUp.listen((var e) {
       if (cropping) {
         pSelected = null;
         draggingCropBox = false;
