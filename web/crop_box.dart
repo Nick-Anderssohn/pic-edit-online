@@ -180,6 +180,13 @@ class CropBox {
 
       drawLayerCtx.clearRect(0, 0, canvas.width, canvas.height);
 
+      drawLayerCtx.save();
+      drawLayerCtx.lineWidth = 2;
+      drawLayerCtx.shadowColor = '#FFFFFF';
+      drawLayerCtx.shadowBlur = 3;
+      drawLayerCtx.shadowOffsetX = 0;
+      drawLayerCtx.shadowOffsetY = 0;
+
       //draw dots at corners
       drawLayerCtx.beginPath();
       drawLayerCtx.arc(p1.x, p1.y, cornerRadius, 0, 2 * PI);
@@ -207,6 +214,8 @@ class CropBox {
       drawLayerCtx.lineTo(p1.x, p1.y);
       drawLayerCtx.stroke();
       drawLayerCtx.closePath();
+
+      drawLayerCtx.restore();
 
       _refreshDisplay();
     }
