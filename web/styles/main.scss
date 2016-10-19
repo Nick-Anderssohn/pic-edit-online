@@ -1,4 +1,5 @@
 $nice-grey: #e7e8e9;
+$grey: #C4C4C4;
 $white: #ffffff;
 $black: #000000;
 $marble-blue: #566D7E;
@@ -14,6 +15,7 @@ $grey-font-color: #D6DBDF;
 }
 
 .title {
+  background-color: $nice-grey;
   color: $cool-blue;
   margin: 0px;
   font-size: 35px;

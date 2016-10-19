@@ -10,12 +10,12 @@ DivElement divSelectFile;
 DivElement canvasContainer;
 
 main() {
+  picCanvas = null;
   _getElements();
   _setHandlers();
 }
 
 _getElements() {
-  picCanvas = querySelector('#pic-canvas');
   fileInput = querySelector('#file-input');
   optionCrop = querySelector('#option-crop');
   divDownload = querySelector('#option-download');
@@ -35,7 +35,8 @@ _setHandlers() {
 }
 
 _loadFile() {
-  picCanvas.remove();
+  if (picCanvas != null)
+    picCanvas.remove();
   picCanvas = new CanvasElement();
   canvasContainer.children.add(picCanvas);
   picCanvas.classes.add('pic-canvas');
