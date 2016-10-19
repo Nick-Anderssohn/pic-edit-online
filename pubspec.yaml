@@ -8,6 +8,7 @@ dependencies:
   browser: any
   js: any
   sass: any
+  image: any
 transformers:
 - $dart2js:
     minify: true

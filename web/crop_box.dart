@@ -26,8 +26,8 @@ class CropBox {
       p4 = new RPoint(tempW, 2 * tempH);
       _drawBox();
     } else if (_cropping && !value) {
-      //drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
-      //_refreshDisplay();
+      drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
+      _refreshDisplay();
     }
     _cropping = value;
   }

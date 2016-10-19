@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:async';
 import 'image_editor.dart';
 import 'drop_down.dart';
 
@@ -13,6 +14,8 @@ DivElement canvasContainer;
 DropDown editDD;
 DivElement restoreOriginalOption;
 AreaElement downloadHelper;
+DivElement titleElement;
+bool loading = false;
 
 main() {
   _getElements();
@@ -28,6 +31,7 @@ _getElements() {
   divEdit = querySelector('#option-edit');
   canvasContainer = querySelector('#canvas-container');
   downloadHelper = querySelector('#download-helper');
+  titleElement = querySelector('#title');
 
   editDD = new DropDown(divEdit);
   restoreOriginalOption = new DivElement();
@@ -35,20 +39,31 @@ _getElements() {
 }
 
 
-_setHandlers() {
+_setHandlers() async {
   divSelectFile.onClick.listen((var e) => document.getElementById('file-input').click());
   fileInput.onChange.listen((var e) => _loadFile());
-  optionCrop.onClick.listen((var e) => editor.cropBox.cropping = !editor.cropBox.cropping);
-  divDownload.onClick.listen((var e) {
-    var dataURL = editor.canvas.toDataUrl();
-    downloadHelper.href = dataURL;
-    print("test1");
-    document.getElementById('download-helper').click();
-    //window.location.href = dataURL;
+  optionCrop.onClick.listen((var e) {
+    if (editor.cropBox.cropping) {
+      editor.drawLayerCtx.clearRect(0, 0, editor.drawLayer.width, editor.drawLayer.height);
+      editor.refreshDisplay();
+    }
+    editor.cropBox.cropping = !editor.cropBox.cropping;
+  });
+  divDownload.onClick.listen((var e) async {
+    //var dataURL = editor.canvas.toDataUrl();
+    _downloadPNG();
   });
   restoreOriginalOption.onClick.listen((var e) => _loadFile());
   divEdit.onClick.listen((var e) => editDD.target.hidden = !editDD.target.hidden);
   editDD.addItem(restoreOriginalOption);
+}
+
+_downloadPNG() async {
+  titleElement.text = "Pic Edit Online - Creating PNG...";
+  await new Future.delayed(new Duration(milliseconds: 1)); //otherwise above text doesn't have time to appear...
+  downloadHelper.href = Url.createObjectUrlFromBlob(editor.getPNGBlob());
+  document.getElementById('download-helper').click();
+  titleElement.text = "Pic Edit Online";
 }
 
 _loadFile() {

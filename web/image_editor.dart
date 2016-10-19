@@ -1,6 +1,7 @@
 import 'dart:html';
 //import 'dart:io';
 import 'crop_box.dart';
+import 'package:image/image.dart';
 
 class ImageEditor {
   CanvasElement canvas;
@@ -39,7 +40,7 @@ class ImageEditor {
     cropBox.onCrop.listen((var e) => scalar = imageLayer.width / canvas.getBoundingClientRect().width);
   }
 
-  _refreshDisplay() {
+  refreshDisplay() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.drawImage(imageLayer, 0, 0);
     ctx.drawImage(drawLayer, 0, 0);
@@ -58,10 +59,17 @@ class ImageEditor {
         //canvasHeight = (image.height * (canvas.width / image.width)).round(); //scale correctly
         canvasHeight = image.height;
         imageLayerCtx.drawImageScaled(image, 0, 0, canvas.width, canvas.height);
-        _refreshDisplay();
+        refreshDisplay();
       });
       image.src = e.target.result;
     });
     reader.readAsDataUrl(imgFile);
+  }
+
+  //image conversion using Brendan Duncan's library from https://github.com/brendan-duncan/image
+  Blob getPNGBlob() {
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    Image i = new Image.fromBytes(canvas.width, canvas.height, imageData.data);
+    return new Blob([encodePng(i)]);
   }
 }
