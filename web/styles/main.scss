@@ -2,9 +2,10 @@ $nice-grey: #e7e8e9;
 $white: #ffffff;
 $black: #000000;
 $marble-blue: #566D7E;
+$slate-blue: #2B487F;
 $dark-slate-blue: #2B3856;
 $cool-blue: #567890;
-$chill-green: #1ABC9C;
+$green-steel: #2C4750;
 $dark-blue-steel: #2C3E50;
 $grey-font-color: #D6DBDF;
 
@@ -14,7 +15,9 @@ $grey-font-color: #D6DBDF;
 
 .title {
   color: $cool-blue;
-  margin: 5px;
+  margin: 0px;
+  font-size: 35px;
+  line-height: 45px;
 }
 
 .pic-canvas {
@@ -31,7 +34,7 @@ $grey-font-color: #D6DBDF;
 
 .page {
   position: absolute;
-  height: 100%;
+  height: calc(100% - 45px);
   width: 100%;
   background-color: $nice-grey;
   overflow: hidden;
@@ -41,6 +44,8 @@ $grey-font-color: #D6DBDF;
   float: left;
   width: 100%;
   background-color: $dark-slate-blue;
+  border-bottom: solid;
+  border-bottom-width: 1px;
 }
 
 .canvas-container {
@@ -56,4 +61,24 @@ $grey-font-color: #D6DBDF;
   padding-top: 5px;
   padding-bottom: 5px;
   cursor: pointer;
+  border-bottom: solid;
+  border-bottom-width: 1px;
+  border-color: $black;
+  &:hover {
+    background-color: $green-steel;
+  }
+}
+
+.top-bar-option {
+  float: left;
+  margin-right: 5px;
+  border: none;
+  width: 80px;
+  color: $grey-font-color;
+  text-align: center;
+  cursor: pointer;
+  line-height: 22px;
+  &:hover {
+    background-color: $slate-blue;
+  }
 }
