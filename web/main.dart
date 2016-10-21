@@ -78,5 +78,5 @@ _loadFile() {
   picCanvas.classes.add('pic-canvas');
   if (fileInput.files[0] != null)
     editor = new ImageEditor(picCanvas, fileInput.files[0]);
-  undoOption.onClick.listen((var e) => editor.urManager.undo());
+  undoOption.onClick.listen((var e) => editor.undo());
 }
