@@ -26,8 +26,8 @@ class ImageEditor {
   CanvasRenderingContext2D get scratchCanvasCtx => scratchCanvas.context2D;
   ImageElement image;
   File imgFile;
-  List<URAction> _undoStack = new List<URAction>();
-  List<URAction> _redoStack = new List<URAction>();
+  List<URAction> undoStack = new List<URAction>();
+  List<URAction> redoStack = new List<URAction>();
   double scalar = 1.0;
   int get canvasWidth => canvas.width;
   void set canvasWidth(int value) {
@@ -61,7 +61,7 @@ class ImageEditor {
     cropBox = new CropBox(canvas, drawLayer, imageLayer, scalar);
     cropBox.onCrop.listen((var e) {
       scalar = imageLayer.width / canvas.getBoundingClientRect().width;
-      _redoStack.clear();
+      redoStack.clear();
     });
 
   }
@@ -72,7 +72,13 @@ class ImageEditor {
   }
 
   addUndoState() {
-    _undoStack.add(getCurState());
+    undoStack.add(getCurState());
+    querySelector('#undo-option').style.color = '#FFFFFF';
+  }
+
+  addRedoState() {
+    redoStack.add(getCurState());
+    querySelector('#redo-option').style.color = '#FFFFFF';
   }
 
   refreshDisplay() {
@@ -102,33 +108,37 @@ class ImageEditor {
   }
 
   undo() {
-    _redoStack.add(getCurState());
-    if (_undoStack.last.width < window.innerWidth) {
-      canvas.style.width = _undoStack.last.width.toString() + 'px';
+    addRedoState();
+    if (undoStack.last.width < window.innerWidth) {
+      canvas.style.width = undoStack.last.width.toString() + 'px';
     } else {
       canvas.style.width = '100%';
     }
-    canvasWidth = _undoStack.last.width;
-    canvasHeight = _undoStack.last.height;
-    ImageData cTemp = new ImageData(_undoStack.last.canvasData, _undoStack.last.width);
+    canvasWidth = undoStack.last.width;
+    canvasHeight = undoStack.last.height;
+    ImageData cTemp = new ImageData(undoStack.last.canvasData, undoStack.last.width);
     ctx.putImageData(cTemp, 0, 0);
     imageLayerCtx.drawImage(canvas, 0, 0);
-    _undoStack.removeLast();
+    undoStack.removeLast();
+    if (undoStack.length == 0)
+      querySelector('#undo-option').style.color = '#000000';
   }
 
   redo() {
-    _undoStack.add(getCurState());
-    if (_redoStack.last.width < window.innerWidth) {
-      canvas.style.width = _redoStack.last.width.toString() + 'px';
+    addUndoState();
+    if (redoStack.last.width < window.innerWidth) {
+      canvas.style.width = redoStack.last.width.toString() + 'px';
     } else {
       canvas.style.width = '100%';
     }
-    canvasWidth = _redoStack.last.width;
-    canvasHeight = _redoStack.last.height;
-    ImageData cTemp = new ImageData(_redoStack.last.canvasData, _redoStack.last.width);
+    canvasWidth = redoStack.last.width;
+    canvasHeight = redoStack.last.height;
+    ImageData cTemp = new ImageData(redoStack.last.canvasData, redoStack.last.width);
     ctx.putImageData(cTemp, 0, 0);
     imageLayerCtx.drawImage(canvas, 0, 0);
-    _redoStack.removeLast();
+    redoStack.removeLast();
+    if (redoStack.length == 0)
+      querySelector('#redo-option').style.color = '#000000';
   }
 
   //image conversion using Brendan Duncan's library from https://github.com/brendan-duncan/image

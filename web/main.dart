@@ -64,14 +64,18 @@ _setHandlers() async {
   editDD.addItem(restoreOriginalOption);
   editDD.addItem(undoOption);
   editDD.addItem(redoOption);
+  undoOption.style.color = '#000000';
+  redoOption.style.color = '#000000';
+  undoOption.id = 'undo-option';
+  redoOption.id = 'redo-option';
 }
 
 _downloadPNG() async {
-  titleElement.text = "Pic Edit Online - Creating PNG...";
+  titleElement.text = 'Pic Edit Online - Creating PNG...';
   await new Future.delayed(new Duration(milliseconds: 1)); //otherwise above text doesn't have time to appear...
   downloadHelper.href = Url.createObjectUrlFromBlob(editor.getPNGBlob());
   document.getElementById('download-helper').click();
-  titleElement.text = "Pic Edit Online";
+  titleElement.text = 'Pic Edit Online';
 }
 
 _loadFile() {
@@ -82,6 +86,12 @@ _loadFile() {
   picCanvas.classes.add('pic-canvas');
   if (fileInput.files[0] != null)
     editor = new ImageEditor(picCanvas, fileInput.files[0]);
-  undoOption.onClick.listen((var e) => editor.undo());
-  redoOption.onClick.listen((var e) => editor.redo());
+  undoOption.onClick.listen((var e) {
+    if (editor.undoStack.length > 0)
+    editor.undo();
+  });
+  redoOption.onClick.listen((var e) {
+    if (editor.redoStack.length > 0)
+     editor.redo();
+   });
 }
