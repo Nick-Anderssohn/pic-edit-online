@@ -27,6 +27,7 @@ class ImageEditor {
   ImageElement image;
   File imgFile;
   List<URAction> _undoStack = new List<URAction>();
+  List<URAction> _redoStack = new List<URAction>();
   double scalar = 1.0;
   int get canvasWidth => canvas.width;
   void set canvasWidth(int value) {
@@ -35,7 +36,6 @@ class ImageEditor {
     imageLayer.width = value;
     scalar = imageLayer.width / canvas.getBoundingClientRect().width;
     cropBox.scalar = scalar;
-    print("scalar: " + scalar.toString());
   }
   int get canvasHeight => canvas.height;
   void set canvasHeight(int value) {
@@ -61,7 +61,7 @@ class ImageEditor {
     cropBox = new CropBox(canvas, drawLayer, imageLayer, scalar);
     cropBox.onCrop.listen((var e) {
       scalar = imageLayer.width / canvas.getBoundingClientRect().width;
-      print("scalar: " + scalar.toString());
+      _redoStack.clear();
     });
 
   }
@@ -102,6 +102,7 @@ class ImageEditor {
   }
 
   undo() {
+    _redoStack.add(getCurState());
     if (_undoStack.last.width < window.innerWidth) {
       canvas.style.width = _undoStack.last.width.toString() + 'px';
     } else {
@@ -113,6 +114,21 @@ class ImageEditor {
     ctx.putImageData(cTemp, 0, 0);
     imageLayerCtx.drawImage(canvas, 0, 0);
     _undoStack.removeLast();
+  }
+
+  redo() {
+    _undoStack.add(getCurState());
+    if (_redoStack.last.width < window.innerWidth) {
+      canvas.style.width = _redoStack.last.width.toString() + 'px';
+    } else {
+      canvas.style.width = '100%';
+    }
+    canvasWidth = _redoStack.last.width;
+    canvasHeight = _redoStack.last.height;
+    ImageData cTemp = new ImageData(_redoStack.last.canvasData, _redoStack.last.width);
+    ctx.putImageData(cTemp, 0, 0);
+    imageLayerCtx.drawImage(canvas, 0, 0);
+    _redoStack.removeLast();
   }
 
   //image conversion using Brendan Duncan's library from https://github.com/brendan-duncan/image

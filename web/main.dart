@@ -14,6 +14,7 @@ DivElement canvasContainer;
 DropDown editDD;
 DivElement restoreOriginalOption;
 DivElement undoOption;
+DivElement redoOption;
 AreaElement downloadHelper;
 DivElement titleElement;
 bool loading = false;
@@ -39,6 +40,8 @@ _getElements() {
   restoreOriginalOption.text = 'Restore Original';
   undoOption = new DivElement();
   undoOption.text = 'Undo';
+  redoOption = new DivElement();
+  redoOption.text = 'Redo';
 }
 
 
@@ -60,6 +63,7 @@ _setHandlers() async {
   divEdit.onClick.listen((var e) => editDD.target.hidden = !editDD.target.hidden);
   editDD.addItem(restoreOriginalOption);
   editDD.addItem(undoOption);
+  editDD.addItem(redoOption);
 }
 
 _downloadPNG() async {
@@ -79,4 +83,5 @@ _loadFile() {
   if (fileInput.files[0] != null)
     editor = new ImageEditor(picCanvas, fileInput.files[0]);
   undoOption.onClick.listen((var e) => editor.undo());
+  redoOption.onClick.listen((var e) => editor.redo());
 }
