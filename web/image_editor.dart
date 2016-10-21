@@ -1,9 +1,10 @@
 import 'dart:html';
-//import 'dart:io';
 import 'crop_box.dart';
+import 'undo_redo_manager.dart';
 import 'package:image/image.dart';
 
 class ImageEditor {
+  UndoRedoManager urManager = new UndoRedoManager();
   CanvasElement canvas;
   CanvasRenderingContext2D ctx;
   CanvasElement drawLayer = new CanvasElement();
@@ -33,11 +34,40 @@ class ImageEditor {
 
   ImageEditor(CanvasElement canvas, File imageFile) {
     this.canvas = canvas;
+    urManager.canvas = canvas;
     ctx = canvas.context2D;
     imgFile = imageFile;
     _loadFile();
     cropBox = new CropBox(canvas, drawLayer, imageLayer, scalar);
-    cropBox.onCrop.listen((var e) => scalar = imageLayer.width / canvas.getBoundingClientRect().width);
+    cropBox.onCrop.listen((var e) {
+      scalar = imageLayer.width / canvas.getBoundingClientRect().width;
+      urManager.addState(getCurState());
+    });
+    urManager.onUndo.listen((var e) {
+      if (canvas.width > window.innerWidth) {
+        print("test");
+          canvas.style.width = "100%";
+          scalar = imageLayer.width / canvas.getBoundingClientRect().width;
+      }
+      else {
+        canvas.style.width = canvas.width.toString() + 'px';
+        canvas.style.height = canvas.height.toString() + 'px';
+        scalar = imageLayer.width / canvas.getBoundingClientRect().width;
+      }
+      // imageLayer.width = canvas.width;
+      // imageLayer.height = canvas.height;
+      // imageLayerCtx.clearRect(0, 0, imageLayer.width, imageLayer.height);
+      // drawLayer.width = canvas.width;
+      // drawLayer.height = canvas.height;
+      // drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
+      // imageLayerCtx.drawImage(canvas, 0, 0);
+      // refreshDisplay();
+    });
+    urManager.addState(getCurState());
+  }
+
+  URAction getCurState() {
+    return new URAction(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
   }
 
   refreshDisplay() {
