@@ -61,7 +61,7 @@ class ImageEditor {
     cropBox = new CropBox(canvas, drawLayer, imageLayer, scalar);
     cropBox.onCrop.listen((var e) {
       scalar = imageLayer.width / canvas.getBoundingClientRect().width;
-      redoStack.clear();
+      clearRedoStack();
     });
 
   }
@@ -81,6 +81,16 @@ class ImageEditor {
     querySelector('#redo-option').style.color = '#FFFFFF';
   }
 
+  clearUndoStack() {
+    undoStack.clear();
+    querySelector('#undo-option').style.color = '#000000';
+  }
+
+  clearRedoStack() {
+    redoStack.clear();
+    querySelector('#redo-option').style.color = '#000000';
+  }
+
   refreshDisplay() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.drawImage(imageLayer, 0, 0);
@@ -96,7 +106,7 @@ class ImageEditor {
           canvas.style.width = image.width.toString() + 'px';
         }
         else
-          canvas.style.width = "100%";
+          canvas.style.width = '100%';
         canvasWidth = image.width;
         canvasHeight = image.height;
         imageLayerCtx.drawImageScaled(image, 0, 0, canvas.width, canvas.height);
