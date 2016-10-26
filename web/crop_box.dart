@@ -2,13 +2,15 @@ import 'dart:html';
 import 'dart:math';
 import 'dart:async';
 import 'r_point.dart';
+import 'image_container.dart';
 
 class CropBox {
-  CanvasElement canvas;
+  ImageContainer layers;
+  CanvasElement get canvas => layers.canvas;
   CanvasRenderingContext2D get ctx => canvas.context2D;
-  CanvasElement drawLayer;
+  CanvasElement get drawLayer => layers.drawLayer;
   CanvasRenderingContext2D get drawLayerCtx => drawLayer.context2D;
-  CanvasElement imageLayer;
+  CanvasElement get imageLayer => layers.imageLayer;
   CanvasRenderingContext2D get imageLayerCtx => imageLayer.context2D;
   CanvasElement scratchCanvas = new CanvasElement();
   CanvasRenderingContext2D get scratchCanvasCtx => scratchCanvas.context2D;
@@ -36,17 +38,17 @@ class CropBox {
   RPoint p2 = null; //crop box point 2
   RPoint p3 = null; //crop box point 3
   RPoint p4 = null; //crop box point 4
-  double scalar = 1.0;
+  double get scalar => layers.scalar;
+  void set scalar(double value) {
+    layers.scalar = value;
+  }
   int _cornerRadius = 4;
   int get cornerRadius => (_cornerRadius * scalar).round();
   StreamController _cropStreamer = new StreamController.broadcast();
   Stream get onCrop => _cropStreamer.stream;
 
-  CropBox(CanvasElement canvas, CanvasElement drawLayer, CanvasElement imageLayer, double scalar) {
-    this.canvas = canvas;
-    this.drawLayer = drawLayer;
-    this.imageLayer = imageLayer;
-    this.scalar = scalar;
+  CropBox(ImageContainer layers) {
+    this.layers = layers;
     _handleCropping();
   }
 
