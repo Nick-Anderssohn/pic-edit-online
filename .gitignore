@@ -5,4 +5,3 @@ pubspec.lock
 build
 packages
 .packages
-build_gh_pages.sh
