@@ -1,5 +1,5 @@
 .body {
-  margin: 0px;
+  margin: 0;
   background-color: #e7e8e9; }
 
 .title {
@@ -27,7 +27,7 @@
 
 .top-bar {
   float: left;
-  width: calc(100% - 5px);
+  width: 100%;
   background-color: #2B3856;
   border-bottom: solid;
   border-bottom-width: 1px;
