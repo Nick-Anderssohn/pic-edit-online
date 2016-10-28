@@ -21,11 +21,6 @@ class ImageEditor extends ImageContainer {
   List<URAction> redoStack = new List<URAction>();
   CropBox cropBox;
 
-  // void set canvasWidth(int value) {
-  //   super.canvasWidth = value;
-  //   cropBox.scalar = scalar;
-  // }
-
   ImageEditor(CanvasElement canvas, File imageFile) : super (canvas, imageFile) {
     window.onKeyDown.listen((KeyboardEvent e) {
       if (e.keyCode == KeyCode.ENTER)
