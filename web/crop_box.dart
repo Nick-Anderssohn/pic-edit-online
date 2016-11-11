@@ -63,9 +63,16 @@ class CropBox {
     int ogY = 0;
     canvas.onMouseDown.listen((MouseEvent e) {
       if (cropping) {
+        int realX, realY;
         var cRect = canvas.getBoundingClientRect();
-        int realX = (e.client.x - cRect.left) * scalar;
-        int realY = (e.client.y - cRect.top) * scalar;
+        //because of odd typing rules: DO NOT REMOVE TRY CATCH OR .truncate() calls
+        try {
+          realX = (e.client.x.truncate() - cRect.left.truncate()) * scalar;
+          realY = (e.client.y.truncate() - cRect.top.truncate()) * scalar;
+        } catch (e) {
+          print(e);
+        }
+
         ogX = realX;
         ogY = realY;
         //if box coordinates have not been set
@@ -77,9 +84,15 @@ class CropBox {
 
     window.onMouseMove.listen((var e) {
       if (cropping) {
+        int realX, realY;
         var cRect = canvas.getBoundingClientRect();
-        int realX = (e.client.x - cRect.left) * scalar;
-        int realY = (e.client.y - cRect.top) * scalar;
+        //because of odd typing rules: DO NOT REMOVE TRY CATCH OR .truncate() calls
+        try {
+          realX = (e.client.x.truncate() - cRect.left.truncate()) * scalar;
+          realY = (e.client.y.truncate() - cRect.top.truncate()) * scalar;
+        } catch (e) {
+          print(e);
+        }
 
         if (pSelected != null) {
           if (realX < 0)
@@ -122,13 +135,13 @@ class CropBox {
   }
 
   RPoint _getSelectedCropCorner(int realX, int realY) {
-    if (realX > (p1.x + cornerRadius / 2) - cornerRadius && realX < (p1.x + cornerRadius / 2) + cornerRadius && realY > (p1.y + cornerRadius / 2) - cornerRadius && realY < (p1.y + cornerRadius / 2) + cornerRadius)
+    if (realX > p1.x - cornerRadius && realX < p1.x + cornerRadius && realY > p1.y - cornerRadius && realY < p1.y + cornerRadius)
       return p1;
-    if (realX > (p2.x + cornerRadius / 2) - cornerRadius && realX < (p2.x + cornerRadius / 2) + cornerRadius && realY > (p2.y + cornerRadius / 2) - cornerRadius && realY < (p2.y + cornerRadius / 2) + cornerRadius)
+    if (realX > p2.x - cornerRadius && realX < p2.x + cornerRadius && realY > p2.y - cornerRadius && realY < p2.y + cornerRadius)
       return p2;
-    if (realX > (p3.x + cornerRadius / 2) - cornerRadius && realX < (p3.x + cornerRadius / 2) + cornerRadius && realY > (p3.y + cornerRadius / 2) - cornerRadius && realY < (p3.y + cornerRadius / 2) + cornerRadius)
+    if (realX > p3.x - cornerRadius && realX < p3.x + cornerRadius && realY > p3.y - cornerRadius && realY < p3.y + cornerRadius)
       return p3;
-    if (realX > (p4.x + cornerRadius / 2) - cornerRadius && realX < (p4.x + cornerRadius / 2) + cornerRadius && realY > (p4.y + cornerRadius / 2) - cornerRadius && realY < (p4.y + cornerRadius / 2) + cornerRadius)
+    if (realX > p4.x - cornerRadius && realX < p4.x + cornerRadius && realY > p4.y - cornerRadius && realY < p4.y + cornerRadius)
       return p4;
 
     return null;
@@ -267,6 +280,6 @@ class CropBox {
       //canvas.style.height = imageLayer.height.toString() + "px";
       canvas.width = imageLayer.width;
       canvas.height = imageLayer.height;
-      scalar = imageLayer.width / canvas.getBoundingClientRect().width;
+      scalar = canvas.width / canvas.getBoundingClientRect().width;
     }
 }

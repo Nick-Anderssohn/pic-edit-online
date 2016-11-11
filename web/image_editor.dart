@@ -32,7 +32,7 @@ class ImageEditor extends ImageContainer {
     });
     cropBox = new CropBox(this);
     cropBox.onCrop.listen((var e) {
-      scalar = imageLayer.width / canvas.getBoundingClientRect().width;
+      scalar = canvas.width / canvas.getBoundingClientRect().width;
       clearRedoStack();
     });
 
