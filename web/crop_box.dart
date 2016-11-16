@@ -19,8 +19,8 @@ class CropBox {
   bool get cropping => _cropping;
   void set cropping(bool value) {
     if (!_cropping && value == true) {
-      int tempW = (.25 * canvas.width).truncate();
-      int tempH = (.25 * canvas.height).truncate();
+      double tempW = (.25 * canvas.width);
+      double tempH = (.25 * canvas.height);
       //add/draw points
       p1 = new RPoint(tempW, tempH);
       p2 = new RPoint(2 * tempW, tempH);
@@ -63,54 +63,40 @@ class CropBox {
     int ogY = 0;
     canvas.onMouseDown.listen((MouseEvent e) {
       if (cropping) {
-        int realX, realY;
         var cRect = canvas.getBoundingClientRect();
-        //because of odd typing rules: DO NOT REMOVE TRY CATCH OR .truncate() calls
-        try {
-          realX = (e.client.x.truncate() - cRect.left.truncate()) * scalar;
-          realY = (e.client.y.truncate() - cRect.top.truncate()) * scalar;
-        } catch (e) {
-          print(e);
-        }
-
-        ogX = realX;
-        ogY = realY;
+        double realX = ((e.client.x - cRect.left) * scalar) as double;
+        double realY = (e.client.y - cRect.top) * scalar as double;
+        ogX = realX.truncate();
+        ogY = realY.truncate();
         //if box coordinates have not been set
-        pSelected = _getSelectedCropCorner(realX, realY);
+        pSelected = _getSelectedCropCorner(realX.truncate(), realY.truncate());
         if (pSelected == null)
-          draggingCropBox = _isInCropBox(realX, realY);
+          draggingCropBox = _isInCropBox(realX.truncate(), realY.truncate());
       }
     });
 
     window.onMouseMove.listen((var e) {
       if (cropping) {
-        int realX, realY;
         var cRect = canvas.getBoundingClientRect();
-        //because of odd typing rules: DO NOT REMOVE TRY CATCH OR .truncate() calls
-        try {
-          realX = (e.client.x.truncate() - cRect.left.truncate()) * scalar;
-          realY = (e.client.y.truncate() - cRect.top.truncate()) * scalar;
-        } catch (e) {
-          print(e);
-        }
-
+        double realX = (e.client.x - cRect.left) * scalar as double;
+        double realY = (e.client.y - cRect.top) * scalar as double;
         if (pSelected != null) {
           if (realX < 0)
-            realX = 0;
+            realX = 0.0;
           else if (realX > canvas.width)
-            realX = canvas.width;
+            realX = canvas.width.toDouble();
 
           if (realY < 0)
-            realY = 0;
+            realY = 0.0;
           else if (realY > canvas.height)
-            realY = canvas.height;
+            realY = canvas.height.toDouble();
           pSelected.x = realX;
           pSelected.y = realY;
           _drawBox();
         } else if (draggingCropBox) {
-          _moveBox(ogX - realX, ogY - realY);
-          ogX = realX;
-          ogY = realY;
+          _moveBox((ogX - realX).truncate(), (ogY - realY).truncate());
+          ogX = realX.truncate();
+          ogY = realY.truncate();
         }
       }
     });
@@ -154,8 +140,8 @@ class CropBox {
   }
 
   _moveBox(int distX, int distY) {
-    int ogW = p2.x - p1.x;
-    int ogH = p4.y - p1.y;
+    double ogW = p2.x - p1.x;
+    double ogH = p4.y - p1.y;
     p1.x -= distX;
     p2.x -= distX;
     p3.x -= distX;
@@ -167,20 +153,20 @@ class CropBox {
     p4.y -= distY;
 
     if (p1.x < 0) {
-      p4.x = p1.x = 0;
+      p4.x = p1.x = 0.0;
       p3.x = p2.x = p1.x + ogW;
     }
     else if (p2.x > canvas.width) {
-      p3.x = p2.x = canvas.width;
+      p3.x = p2.x = canvas.width as double;
       p4.x = p1.x = p3.x - ogW;
     }
 
     if (p4.y > canvas.height) {
-      p4.y = p3.y = canvas.height;
+      p4.y = p3.y = canvas.height as double;
       p1.y = p2.y = p4.y - ogH;
     }
     else if (p1.y < 0) {
-      p1.y = p2.y = 0;
+      p1.y = p2.y = 0.0;
       p4.y = p3.y = p1.y + ogH;
     }
 
@@ -249,8 +235,8 @@ class CropBox {
       drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height); //so crop box doesnt show up
       _refreshDisplay();
       //draw image onto scratch
-      scratchCanvas.width = p2.x - p1.x;
-      scratchCanvas.height = p4.y - p1.y;
+      scratchCanvas.width = (p2.x - p1.x).truncate();
+      scratchCanvas.height = (p4.y - p1.y).truncate();
       ctx.save();
       ctx.translate(-p1.x, -p1.y);
       ctx.drawImage(canvas, 0, 0);

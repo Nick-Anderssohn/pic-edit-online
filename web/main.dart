@@ -26,7 +26,7 @@ main() {
 
 _getElements() {
   picCanvas = null;
-  fileInput = querySelector('#file-input');
+  fileInput = querySelector('#file-input') as InputElement;
   optionCrop = querySelector('#option-crop');
   divDownload = querySelector('#option-download');
   divSelectFile = querySelector('#option-select-file');

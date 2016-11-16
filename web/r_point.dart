@@ -2,15 +2,15 @@ import 'dart:math';
 
 class RPoint {
   Point point;
-  int get x => point.x;
-  int get y => point.y;
-  void set x(int value) {
+  double get x => point.x as double;
+  double get y => point.y as double;
+  void set x(double value) {
     point = new Point(value, y);
   }
-  void set y(int value) {
+  void set y(double value) {
     point = new Point(x, value);
   }
-  RPoint(int x, int y) {
+  RPoint(double x, double y) {
     point = new Point(x, y);
   }
 }

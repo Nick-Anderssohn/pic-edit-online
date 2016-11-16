@@ -9,7 +9,7 @@ class URAction {
   int height;
   Uint8ClampedList canvasData;
 
-  URAction(Uint8ClampedList cData, width, height) {
+  URAction(Uint8ClampedList cData, int width, int height) {
     this.canvasData = cData;
     this.width = width;
     this.height = height;

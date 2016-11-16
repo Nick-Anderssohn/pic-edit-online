@@ -48,7 +48,7 @@ abstract class ImageContainer {
         imageLayerCtx.drawImageScaled(image, 0, 0, canvas.width, canvas.height);
         refreshDisplay();
       });
-      image.src = e.target.result;
+      image.src = (e.target as FileReader).result as String;
     });
     reader.readAsDataUrl(imgFile);
   }
