@@ -16,7 +16,7 @@
 .sidebar {
   float: left;
   height: 100%;
-  width: 50px;
+  width: 80px;
   background-color: #566D7E; }
 
 .page {
@@ -36,7 +36,7 @@
 .canvas-container {
   float: left;
   height: 100%;
-  width: calc(100% - 50px); }
+  width: calc(100% - 80px); }
 
 .sidebar-option {
   text-align: center;
