@@ -33,7 +33,7 @@ $grey-font-color: #D6DBDF;
 .sidebar {
   float: left;
   height: 100%;
-  width: 50px;
+  width: 80px;
   background-color: $marble-blue;
 }
 
@@ -56,7 +56,7 @@ $grey-font-color: #D6DBDF;
 .canvas-container {
   float: left;
   height: 100%;
-  width: calc(100% - 50px);
+  width: calc(100% - 80px);
 }
 
 .sidebar-option {

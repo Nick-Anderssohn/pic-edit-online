@@ -1,9 +1,7 @@
 analyzer:
-  strong-mode:
-    implicit-casts: false
+  strong-mode: true
 
 linter:
   rules:
     - avoid_empty_else
     - cancel_subscriptions
-    - close_sinks

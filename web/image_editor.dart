@@ -64,6 +64,7 @@ class ImageEditor extends ImageContainer {
   }
 
   undo() {
+    cropBox.cropping = false;
     addRedoState();
     if (undoStack.last.width < window.innerWidth) {
       canvas.style.width = undoStack.last.width.toString() + 'px';
@@ -102,5 +103,17 @@ class ImageEditor extends ImageContainer {
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     Image i = new Image.fromBytes(canvas.width, canvas.height, imageData.data);
     return new Blob([encodePng(i)]);
+  }
+
+  convertToGrayscale() {
+    cropBox.cropping = false;
+    addUndoState();
+    Uint8ClampedList cData = imageLayerCtx.getImageData(0, 0, canvas.width, canvas.height).data;
+    for (int i = 3; i < cData.length; i += 4) {
+      cData[i - 3] = cData[i - 2] = cData[i - 1] = (cData[i - 3] * 0.3 + cData[i - 2] * 0.59 + cData[i - 1] * 0.11).truncate();
+    }
+    ImageData imgData = new ImageData(cData, canvas.width);
+    imageLayerCtx.putImageData(imgData, 0, 0);
+    refreshDisplay();
   }
 }

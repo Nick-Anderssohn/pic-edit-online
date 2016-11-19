@@ -8,6 +8,7 @@ InputElement fileInput;
 ImageEditor editor;
 DivElement divDownload;
 DivElement optionCrop;
+DivElement optionGrayscale;
 DivElement divSelectFile;
 DivElement divEdit;
 DivElement canvasContainer;
@@ -26,8 +27,9 @@ main() {
 
 _getElements() {
   picCanvas = null;
-  fileInput = querySelector('#file-input') as InputElement;
+  fileInput = querySelector('#file-input');
   optionCrop = querySelector('#option-crop');
+  optionGrayscale = querySelector('#option-grayscale');
   divDownload = querySelector('#option-download');
   divSelectFile = querySelector('#option-select-file');
   divEdit = querySelector('#option-edit');
@@ -59,6 +61,7 @@ _setHandlers() async {
     //var dataURL = editor.canvas.toDataUrl();
     _downloadPNG();
   });
+  optionGrayscale.onClick.listen((var e) => editor.convertToGrayscale());
   restoreOriginalOption.onClick.listen((var e) => _loadFile());
   divEdit.onClick.listen((var e) => editDD.target.hidden = !editDD.target.hidden);
   editDD.addItem(restoreOriginalOption);
