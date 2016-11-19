@@ -19,6 +19,7 @@ class CropBox {
   bool get cropping => _cropping;
   void set cropping(bool value) {
     if (!_cropping && value == true) {
+      querySelector('#title').text = 'Pic Edit Online - Press Enter to Crop';
       int tempW = (.25 * canvas.width).truncate();
       int tempH = (.25 * canvas.height).truncate();
       //add/draw points
@@ -28,6 +29,7 @@ class CropBox {
       p4 = new RPoint(tempW, 2 * tempH);
       _drawBox();
     } else if (_cropping && !value) {
+      querySelector('#title').text = 'Pic Edit Online';
       drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
       _refreshDisplay();
     }
