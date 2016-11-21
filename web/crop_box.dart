@@ -66,14 +66,14 @@ class CropBox {
     canvas.onMouseDown.listen((MouseEvent e) {
       if (cropping) {
         var cRect = canvas.getBoundingClientRect();
-        double realX = ((e.client.x - cRect.left) * scalar) as double;
-        double realY = (e.client.y - cRect.top) * scalar as double;
-        ogX = realX.truncate();
-        ogY = realY.truncate();
+        int realX = (e.client.x - cRect.left) * scalar;
+        int realY = (e.client.y - cRect.top) * scalar;
+        ogX = realX;
+        ogY = realY;
         //if box coordinates have not been set
-        pSelected = _getSelectedCropCorner(realX.truncate(), realY.truncate());
+        pSelected = _getSelectedCropCorner(realX, realY);
         if (pSelected == null)
-          draggingCropBox = _isInCropBox(realX.truncate(), realY.truncate());
+          draggingCropBox = _isInCropBox(realX, realY);
       }
     });
 

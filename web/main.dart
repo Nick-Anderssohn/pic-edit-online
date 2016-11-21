@@ -9,6 +9,7 @@ ImageEditor editor;
 DivElement divDownload;
 DivElement optionCrop;
 DivElement optionGrayscale;
+DivElement optionEraser;
 DivElement divSelectFile;
 DivElement divEdit;
 DivElement canvasContainer;
@@ -18,6 +19,10 @@ DivElement undoOption;
 DivElement redoOption;
 AreaElement downloadHelper;
 DivElement titleElement;
+DivElement topBar;
+DivElement rSliderLabel;
+RangeInputElement radiusSlider;
+DivElement rSliderValueLabel;
 bool loading = false;
 
 main() {
@@ -30,12 +35,17 @@ _getElements() {
   fileInput = querySelector('#file-input');
   optionCrop = querySelector('#option-crop');
   optionGrayscale = querySelector('#option-grayscale');
+  optionEraser = querySelector('#option-eraser');
   divDownload = querySelector('#option-download');
   divSelectFile = querySelector('#option-select-file');
   divEdit = querySelector('#option-edit');
   canvasContainer = querySelector('#canvas-container');
   downloadHelper = querySelector('#download-helper');
   titleElement = querySelector('#title');
+  topBar = querySelector('#top-bar');
+  rSliderLabel = querySelector('#r-slider-label');
+  radiusSlider = querySelector('#radius-slider');
+  rSliderValueLabel = querySelector('#r-slider-value-label');
 
   editDD = new DropDown(divEdit);
   restoreOriginalOption = new DivElement();
@@ -51,11 +61,11 @@ _setHandlers() async {
   divSelectFile.onClick.listen((var e) => document.getElementById('file-input').click());
   fileInput.onChange.listen((var e) => _loadFile());
   optionCrop.onClick.listen((var e) {
-    if (editor.cropBox.cropping) {
+    if (editor.cropMode) {
       editor.drawLayerCtx.clearRect(0, 0, editor.drawLayer.width, editor.drawLayer.height);
       editor.refreshDisplay();
     }
-    editor.cropBox.cropping = !editor.cropBox.cropping;
+    editor.cropMode = !editor.cropMode;
   });
   divDownload.onClick.listen((var e) async {
     //var dataURL = editor.canvas.toDataUrl();
@@ -77,6 +87,22 @@ _setHandlers() async {
       editor.undo();
     else if (e.keyCode == KeyCode.Y)
       editor.redo();
+  });
+
+  optionEraser.onClick.listen((var e) {
+    editor.eraserMode = !editor.eraserMode;
+    radiusSlider..min = '1'
+                ..max = '300'
+                ..value = editor.eraserRadius.toString();
+                // ..text = editor.eraserRadius.toString() + 'px';
+    rSliderValueLabel.text = radiusSlider.value + 'px';
+  });
+
+  radiusSlider.onChange.listen((var e) {
+    if (editor.eraserMode)
+      editor.eraserRadius = radiusSlider.valueAsNumber;
+      rSliderValueLabel.text = radiusSlider.value + 'px';
+      // radiusSlider.text = radiusSlider.value + 'px';
   });
 }
 
@@ -104,4 +130,8 @@ _loadFile() {
     if (editor.redoStack.length > 0)
      editor.redo();
    });
+   radiusSlider.value = editor.eraserRadius.toString();
+   editor.radiusSlider = radiusSlider;
+   editor.rSliderLabel = rSliderLabel;
+   editor.rSliderValueLabel = rSliderValueLabel;
 }

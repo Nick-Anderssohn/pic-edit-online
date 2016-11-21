@@ -27,7 +27,6 @@ $grey-font-color: #D6DBDF;
 
 .pic-canvas {
   float: left;
-  background-color: $nice-grey;
 }
 
 .sidebar {
@@ -86,6 +85,17 @@ $grey-font-color: #D6DBDF;
   &:hover {
     background-color: $slate-blue;
   }
+}
+
+//same as top-bar-option minus the hover stuff
+.top-bar-label {
+  float: left;
+  padding-left: 5px;
+  padding-right: 5px;
+  border: none;
+  color: $grey-font-color;
+  text-align: center;
+  line-height: 22px;
 }
 
 .drop-down {
