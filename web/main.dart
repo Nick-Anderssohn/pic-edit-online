@@ -71,6 +71,13 @@ _setHandlers() async {
   redoOption.style.color = '#000000';
   undoOption.id = 'undo-option';
   redoOption.id = 'redo-option';
+
+  window.onKeyUp.listen((KeyboardEvent e) {
+    if (e.keyCode == KeyCode.Z)
+      editor.undo();
+    else if (e.keyCode == KeyCode.Y)
+      editor.redo();
+  });
 }
 
 _downloadPNG() async {
