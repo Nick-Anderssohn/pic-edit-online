@@ -10,8 +10,7 @@
   line-height: 45px; }
 
 .pic-canvas {
-  float: left;
-  background-color: #e7e8e9; }
+  float: left; }
 
 .sidebar {
   float: left;
@@ -62,6 +61,15 @@
   line-height: 22px; }
   .top-bar-option:hover {
     background-color: #2B487F; }
+
+.top-bar-label {
+  float: left;
+  padding-left: 5px;
+  padding-right: 5px;
+  border: none;
+  color: #D6DBDF;
+  text-align: center;
+  line-height: 22px; }
 
 .drop-down {
   position: absolute;
