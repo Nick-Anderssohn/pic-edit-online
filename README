@@ -1,1 +1,7 @@
 An online minimalistic image editor.
+
+To use, go to https://nick-anderssohn.github.io/pic-edit-online/build/web/
+
+Made with Dart and scss.
+
+Do not use in Safari.
