@@ -10,7 +10,8 @@
   line-height: 45px; }
 
 .pic-canvas {
-  float: left; }
+  float: left;
+  cursor: none; }
 
 .sidebar {
   float: left;
