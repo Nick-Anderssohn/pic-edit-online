@@ -7,4 +7,4 @@ cp -R build/ ~/pic-edit-online-gh-pages
 cp web/main.dart ~/pic-edit-online-gh-pages/build/web/
 git checkout gh-pages
 rm -rf *
-cp -R ~/pic-edit-online-gh-pages/build/web/. .
+cp -R ~/pic-edit-online-gh-pages/build/ ./build/
