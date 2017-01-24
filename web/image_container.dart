@@ -1,6 +1,5 @@
 import 'dart:html';
 
-
 abstract class ImageContainer {
   ImageElement image;
   File imgFile;
@@ -12,12 +11,14 @@ abstract class ImageContainer {
   CanvasRenderingContext2D get imageLayerCtx => imageLayer.context2D;
   CanvasElement scratchCanvas = new CanvasElement();
   CanvasRenderingContext2D get scratchCanvasCtx => scratchCanvas.context2D;
+
   double scalar = 1.0;
   int get canvasWidth => canvas.width;
   void set canvasWidth(int value) {
     canvas.width = value;
     drawLayer.width = value;
     imageLayer.width = value;
+
     scalar = canvas.width / canvas.getBoundingClientRect().width;
   }
   int get canvasHeight => canvas.height;

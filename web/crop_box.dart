@@ -14,6 +14,9 @@ class CropBox {
   CanvasRenderingContext2D get imageLayerCtx => imageLayer.context2D;
   CanvasElement scratchCanvas = new CanvasElement();
   CanvasRenderingContext2D get scratchCanvasCtx => scratchCanvas.context2D;
+  CanvasElement scratchCanvas2 = new CanvasElement();
+  CanvasRenderingContext2D get scratchCanvas2Ctx => scratchCanvas2.context2D;
+
   bool draggingCropBox = false;
   bool _cropping = false;
   bool get cropping => _cropping;
@@ -27,7 +30,7 @@ class CropBox {
       p2 = new RPoint(2 * tempW, tempH);
       p3 = new RPoint(2 * tempW, 2 * tempH);
       p4 = new RPoint(tempW, 2 * tempH);
-      _drawBox();
+      drawBox();
     } else if (_cropping && !value) {
       querySelector('#title').text = 'Pic Edit Online';
       drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
@@ -94,7 +97,7 @@ class CropBox {
             realY = canvas.height;
           pSelected.x = realX;
           pSelected.y = realY;
-          _drawBox();
+          drawBox();
         } else if (draggingCropBox) {
           _moveBox((ogX - realX).truncate(), (ogY - realY).truncate());
           ogX = realX.truncate();
@@ -172,10 +175,10 @@ class CropBox {
       p4.y = p3.y = p1.y + ogH;
     }
 
-    _drawBox();
+    drawBox();
   }
 
-  _drawBox() {
+  drawBox() {
       if (pSelected == p1) {
         p2.y = p1.y;
         p4.x = p1.x;
@@ -239,9 +242,15 @@ class CropBox {
       //draw image onto scratch
       scratchCanvas.width = (p2.x - p1.x).truncate();
       scratchCanvas.height = (p4.y - p1.y).truncate();
+      scratchCanvas2.width = canvas.width;
+      scratchCanvas2.height = canvas.height;
+      scratchCanvas2Ctx.clearRect(0, 0, scratchCanvas2.width, scratchCanvas2.height);
+      scratchCanvas2Ctx.drawImage(canvas, 0, 0);
+      scratchCanvas2Ctx.translate(-p1.x, -p1.y);
       ctx.save();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.translate(-p1.x, -p1.y);
-      ctx.drawImage(canvas, 0, 0);
+      ctx.drawImage(scratchCanvas2, 0, 0);
       ctx.restore();
       scratchCanvasCtx.drawImage(canvas, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);

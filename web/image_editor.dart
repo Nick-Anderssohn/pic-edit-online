@@ -34,7 +34,6 @@ class ImageEditor extends ImageContainer {
   get eraserMode => _eraserMode;
   set eraserMode(bool value) {
     if (value) {
-      canvas.style.cursor = "none";
       if (rSliderLabel != null)
         rSliderLabel.hidden = false;
       if (radiusSlider != null)
@@ -43,7 +42,6 @@ class ImageEditor extends ImageContainer {
         rSliderValueLabel.hidden = false;
     }
     else {
-      canvas.style.cursor = "default";
       _clearDrawLayer();
       refreshDisplay();
       drawLayerCtx.stroke();
@@ -60,6 +58,7 @@ class ImageEditor extends ImageContainer {
   }
   bool erasing = false;
   int eraserRadius = 16;
+  int mouseRadius = 6;
   DivElement rSliderLabel = null;
   RangeInputElement radiusSlider = null;
   DivElement rSliderValueLabel = null;
@@ -81,6 +80,21 @@ class ImageEditor extends ImageContainer {
     });
 
     _eraserHandlers();
+      canvas..onMouseMove.listen((var e) {
+      if (!eraserMode) {
+        var cRect = canvas.getBoundingClientRect();
+        int realX = (e.client.x - cRect.left) * scalar;
+        int realY = (e.client.y - cRect.top) * scalar;
+        print("drawing mouse at ($realX, $realY)");
+        _drawMouse(realX, realY, (mouseRadius * scalar).truncate());
+      }
+    })
+    ..onMouseLeave.listen((var e) {
+      if (!eraserMode) {
+        drawLayerCtx.clearRect(0, 0, drawLayer.width, drawLayer.height);
+        refreshDisplay();
+      }
+    });
   }
 
   URAction getCurState() {
@@ -171,7 +185,7 @@ class ImageEditor extends ImageContainer {
         int realY = (e.client.y - cRect.top) * scalar;
         if (erasing)
           _erase(realX, realY);
-        _drawEraser(realX, realY);
+        _drawMouse(realX, realY, eraserRadius);
       }
     });
 
@@ -197,14 +211,19 @@ class ImageEditor extends ImageContainer {
     });
   }
 
-  _drawEraser(int x, int y) {
+  _drawMouse(int x, int y, int radius) {
     drawLayerCtx.clearRect(0, 0, canvas.width, canvas.height);
+    if (cropMode)
+      cropBox.drawBox();
     refreshDisplay();
     drawLayerCtx.save();
     drawLayerCtx.beginPath();
     drawLayerCtx.strokeStyle = "#000000";
-    drawLayerCtx.arc(x, y, eraserRadius, 0, PI * 2);
+    drawLayerCtx.lineWidth = 2;
+    drawLayerCtx.arc(x, y, radius, 0, PI * 2);
     drawLayerCtx.stroke();
+    drawLayerCtx.fillStyle = "rgba(255,255,255,0.5)";
+    drawLayerCtx.fill();
     drawLayerCtx.closePath();
     drawLayerCtx.restore();
     refreshDisplay();
